@@ -7,38 +7,22 @@ const sqlite3 = require('sqlite3').verbose();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Connect to database
-const db = new sqlite3.Database('./db/schema.sql', err => {
-    if (err) {
-      return console.error(err.message);
-    }
-  
-    console.log('Connected to the election database.');
-  });
-
-db.all(`SELECT * FROM candidates`, (err, rows) => 
+app.get('/', (req, res) => 
 {
-    console.log(rows);
+  res.json({
+    message: 'Hello World'
+  });
 });
 
-// default response for any other request (Not Found) Catch all
-app.use ((req, res) => 
+// default response for any other request(not found) catach all
+app.use((req, res) =>
 {
-    res.status(404).end();
+  res.status(404).end();
 });
 
-// // get route - connection to express.js server
-// app.get('/', (req, res) => 
-// {
-//     res.json
-//     ({
-//         message: 'Hello World'
-//     });
-// });
+// function to start express.js server on port 3001
+app.listen(PORT, () => 
+{
+  console.log(`Server running on port ${PORT}`);
+});
 
-// Start server after DB connection
-db.on('open', () => {
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  });
